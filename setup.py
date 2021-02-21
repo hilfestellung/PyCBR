@@ -1,5 +1,5 @@
 import pathlib
-from setuptools import setup
+from setuptools import setup, find_packages
 
 # The directory containing this file
 HERE = pathlib.Path(__file__).parent
@@ -9,17 +9,17 @@ README = (HERE / "README.md").read_text()
 
 # This call to setup() does all the work
 setup(
-    name="PyCBR",
-    version="1.0.0",
+    name="cbrlib",
+    version="1.0.1",
     description="Library for projects to use with Case Based Reasoning",
     long_description=README,
     long_description_content_type="text/markdown",
     url="https://github.com/hilfestellung/PyCBR",
     author="Christian Dein",
-    author_email="office@realpython.com",
+    author_email="christian.dein@dein-hosting.de",
     license="LGPL-2.1-or-later",
     classifiers=[
-        "License :: OSI Approved :: MIT License",
+        "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.9",
     ],
