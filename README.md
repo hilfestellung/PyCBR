@@ -1,9 +1,9 @@
-# PyCBR
+# Case Based Reasoning library for Python - cbrlib
 
 ## Installation
 
 ```bash
-pip install pycbr
+pip install cbrlib
 ```
 
 
