@@ -23,7 +23,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.9",
     ],
-    packages=["cbrlib"],
+    packages=["cbrlib.evaluation", "cbrlib.model", "cbrlib.reasoning", "cbrlib.utils"],
     include_package_data=True,
     install_requires=["PyYAML"],
 )
