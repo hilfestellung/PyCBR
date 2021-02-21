@@ -13,15 +13,15 @@ pip install cbrlib
 import matplotlib.pyplot as plt
 %matplotlib inline
 
-from evaluation.NumberInterpolationEvaluator import NumberInterpolationEvaluator, NumberInterpolationMetrics, \
+from cbrlib.evaluation.NumberInterpolationEvaluator import NumberInterpolationEvaluator, NumberInterpolationMetrics, \
     NumberInterpolation
-from model.AssemblyClass import AssemblyClass
-from model.Attribute import Attribute
-from model.EnumerationPredicate import EnumerationPredicate
-from model.FloatClass import FloatClass
-from model.IntegerClass import IntegerClass
-from model.RangePredicate import RangePredicate
-from model.StringClass import StringClass
+from cbrlib.model.AssemblyClass import AssemblyClass
+from cbrlib.model.Attribute import Attribute
+from cbrlib.model.EnumerationPredicate import EnumerationPredicate
+from cbrlib.model.FloatClass import FloatClass
+from cbrlib.model.IntegerClass import IntegerClass
+from cbrlib.model.RangePredicate import RangePredicate
+from cbrlib.model.StringClass import StringClass
 
 #plt.style.use('ggplot')
 ```

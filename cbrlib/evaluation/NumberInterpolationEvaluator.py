@@ -37,7 +37,7 @@ def interpolate_polynom(stretched_distance: float, linearity: float) -> float:
     return pow(1 - stretched_distance, 1 / linearity)
 
 
-def interpolate_sigmoid(stretched_distance: float, linearity: float) -> float:
+def interpolate_root(stretched_distance: float, linearity: float) -> float:
     if linearity == 1:
         return 1 - stretched_distance
     elif linearity == 0:
@@ -45,7 +45,7 @@ def interpolate_sigmoid(stretched_distance: float, linearity: float) -> float:
     return pow(1 - stretched_distance, linearity)
 
 
-def interpolate_root(stretched_distance: float, linearity: float) -> float:
+def interpolate_sigmoid(stretched_distance: float, linearity: float) -> float:
     if linearity == 1:
         return 1 - stretched_distance
     if stretched_distance < 0.5:
