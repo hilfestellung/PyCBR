@@ -6,9 +6,6 @@
 pip install cbrlib
 ```
 
-
-## Sample for the NumberInterpolationEvaluator
-
 ```python
 import matplotlib.pyplot as plt
 %matplotlib inline
@@ -37,7 +34,7 @@ import timeit
 #plt.style.use('ggplot')
 ```
 
-### Price similarity evaluation
+## NumberInterpolationEvaluator
 
 We create a ```price_class``` from ```cbrlib.model.FloatClass``` and set the predicate for this class to be of ```cbrlib.model.RangePredicate``` which gives the boundary of a minimum of 10 and a miximum possible value of 10000. We also define different number interpolation evaluators.
 
@@ -172,6 +169,7 @@ plt.show()
     
 
 
+## LookupTableEvaluator
 We also can define a ```brands_class``` of Type ```cbrlib.model.StringClass```.
 
 
@@ -216,6 +214,7 @@ print(f'BMW is {brand_evaluator.evaluate(brand_class.read_object("BMW"), brand_c
     BMW is 60.0% similar to VW
 
 
+## AssemblyAverageEvaluator
 Or we can use the ```cbrlib.model.AssemblyClass``` to define an ```UsedCar``` descriptor and find a used car with a ```cbrlib.reasoner.LinearReasoner```
 
 
@@ -312,6 +311,7 @@ print(to_json_string(candidates, indent=4))
     ]
 
 
+## Performance
 Let us now create a ```cbrlib.reasoner.Reasoner``` from ```cbrlib.reasoner.LinearReasoner``` with a set of 1000000 random used cars.
 
 
