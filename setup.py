@@ -10,8 +10,8 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="cbrlib",
-    version="1.0.1",
-    description="Library for projects to use with Case Based Reasoning",
+    version="1.1.0",
+    description="Library for the implementation of projects with the help of Case Based Reasoning",
     long_description=README,
     long_description_content_type="text/markdown",
     url="https://github.com/hilfestellung/PyCBR",

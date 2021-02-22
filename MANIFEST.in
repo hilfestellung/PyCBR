@@ -1,4 +1,4 @@
-include LICENSE CHANGES README.rst requirements.txt
+include LICENSE CHANGES README.md requirements.txt output_3_0.png
 exclude test
 recursive-exclude * __pycache__
 recursive-exclude * *.pyc
