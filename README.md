@@ -130,7 +130,7 @@ plt.show()
 
 
     
-![png](output_6_0.png)
+![png](https://raw.githubusercontent.com/hilfestellung/PyCBR/main/output_6_0.png)
     
 
 
@@ -165,7 +165,7 @@ plt.show()
 
 
     
-![png](output_10_0.png)
+![png](https://raw.githubusercontent.com/hilfestellung/PyCBR/main/output_10_0.png)
     
 
 

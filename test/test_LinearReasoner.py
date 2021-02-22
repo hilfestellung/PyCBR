@@ -17,7 +17,7 @@ class TestLinearReasoner(unittest.TestCase):
         self.assertEqual(opts.limit, 20)
         opts = InferenceOptions({
             'skip': 1,
-            'limit': 20
+            'limit': 5
         })
         self.assertEqual(opts.skip, 1)
         self.assertEqual(opts.limit, 5)
