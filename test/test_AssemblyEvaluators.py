@@ -14,7 +14,7 @@ from cbrlib.model.StringClass import StringClass
 from cbrlib.utils.serializer import to_json_string
 
 
-class MyTestCase(unittest.TestCase):
+class TestAssemblyEvaluators(unittest.TestCase):
 
     def setUp(self) -> None:
         color_class = StringClass('SimpleColor')

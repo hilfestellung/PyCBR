@@ -6,7 +6,7 @@ from cbrlib.model.SetClass import SetClass
 from cbrlib.utils.serializer import to_json_string
 
 
-class MyTestCase(unittest.TestCase):
+class TestSetEvaluator(unittest.TestCase):
 
     def setUp(self) -> None:
         self.integer_class = IntegerClass('Integer')

@@ -5,7 +5,7 @@ from cbrlib.model.IntegerClass import IntegerClass
 from cbrlib.utils.serializer import to_json_string
 
 
-class MyTestCase(unittest.TestCase):
+class TestNumberInterpolationEvaluators(unittest.TestCase):
 
     def setUp(self) -> None:
         self.integer_class = IntegerClass('Integer')

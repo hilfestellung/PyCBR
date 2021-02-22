@@ -4,7 +4,7 @@ from cbrlib.evaluation.LookupTableEvaluator import LookupTableEvaluator
 from cbrlib.model.IntegerObject import IntegerObject
 
 
-class MyTestCase(unittest.TestCase):
+class TestLookupTableEvaluator(unittest.TestCase):
 
     def setUp(self) -> None:
         self.table = {

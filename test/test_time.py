@@ -4,7 +4,7 @@ from datetime import date, datetime
 from cbrlib.utils.time import date_to_unixtimestamp, datetime_to_unixtimestamp
 
 
-class MyTestCase(unittest.TestCase):
+class TestTime(unittest.TestCase):
 
     def test_date_to_datetime(self):
         date_ = date.fromisoformat('2021-02-28')
