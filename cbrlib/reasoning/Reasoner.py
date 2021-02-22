@@ -1,27 +1,34 @@
-from abc import ABC
-from typing import Iterable
+from abc import ABC, abstractmethod
+from cbrlib.evaluation.SimilarityEvaluator import SimilarityEvaluator
+from typing import Iterable, Optional
 
 from cbrlib.evaluation.AssemblyEvaluator import AssemblyEvaluator
 from cbrlib.model.AssemblyObject import AssemblyObject
 from cbrlib.reasoning.ResultListEntry import ResultListEntry
 
 
+class InferenceOptions:
+
+    def __init__(self, options: Optional[dict] = None):
+        self.skip = 0
+        self.limit = 10
+        if options is not None:
+            for (k, v) in options.items():
+                if hasattr(self, k):
+                    self.__setattr__(k, v)
+
 class Reasoner(ABC):
 
-    def __init__(self, name: str, case_base: Iterable[AssemblyObject], default_evaluator: AssemblyEvaluator):
-        self.__name = name
-        self.__case_base = case_base
-        self.__default_evaluator = default_evaluator
+    def __init__(self, casebase: Iterable[AssemblyObject], evaluator: AssemblyEvaluator):
+        self.__casebase = casebase
+        self.__evaluator = evaluator
 
-    def get_name(self):
-        return self.__name
+    def get_casebase(self) -> Iterable[AssemblyObject]:
+        return self.__casebase
 
-    def infer(self, fact: AssemblyObject):
-        evaluator = self.__default_evaluator
-        case_base = self.__case_base
-        result_list = list()
-        for case in case_base:
-            similarity = evaluator.evaluate(fact, case)
-            result_list.append(ResultListEntry(similarity, case))
-        result_list = sorted(result_list, reverse=True)
-        return result_list[:3]
+    def get_evaluator(self):
+        return self.__evaluator
+
+    @abstractmethod
+    def infer(self, fact: AssemblyObject, options: Optional[InferenceOptions] = InferenceOptions()):
+        raise NotImplementedError()

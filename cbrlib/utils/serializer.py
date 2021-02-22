@@ -34,17 +34,17 @@ def prepare_serializable(element: Union[ModelElement, list, dict]):
     return result
 
 
-def to_json_string(element: Union[ModelElement, list, dict]):
-    return json.dumps(prepare_serializable(element), default=json_serializer)
+def to_json_string(element: Union[ModelElement, list, dict], *args, **kwargs):
+    return json.dumps(prepare_serializable(element), default=json_serializer, *args, **kwargs)
 
 
-def to_json(element: Union[ModelElement, list], fp: IO[str]):
-    json.dump(prepare_serializable(element), fp, default=json_serializer)
+def to_json(element: Union[ModelElement, list], fp: IO[str], *args, **kwargs):
+    json.dump(prepare_serializable(element), fp, default=json_serializer, *args, **kwargs)
 
 
-def to_yaml_string(element: Union[ModelElement, list], is_top: Optional[bool] = True):
-    return yaml.dump(prepare_serializable(element))
+def to_yaml_string(element: Union[ModelElement, list], *args, **kwargs):
+    return yaml.dump(prepare_serializable(element), *args, **kwargs)
 
 
-def to_yaml(element: ModelElement, fp: IO[str],  is_top: Optional[bool] = True):
-    yaml.dump(prepare_serializable(element), fp)
+def to_yaml(element: ModelElement, fp: IO[str], *args, **kwargs):
+    yaml.dump(prepare_serializable(element), fp, *args, **kwargs)
