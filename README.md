@@ -377,7 +377,7 @@ task = timeit.Timer(lambda: reasoner.infer(
         'skip': 0,
         'limit': 10
     })
-    ))
+))
 
 measures = task.repeat(repetitions, loops)
 best = reduce(lambda c, n: min(c, n), measures)
