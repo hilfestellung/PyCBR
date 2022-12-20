@@ -131,7 +131,7 @@ def main() -> None:
                 sweetness=10,
                 peatiness=0,
             ),
-            limit=5000,
+            limit=20,
             threshold=0.4,
         ),
         whiskey_evaluator(),
