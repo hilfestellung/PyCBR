@@ -1,0 +1,33 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"editor.formatOnSave": true,
+		"editor.codeActionsOnSave": {
+			"source.organizeImports": true
+		},
+		"python.languageServer": "Pylance",
+		"python.analysis.autoImportCompletions": true,
+		"python.analysis.typeCheckingMode": "basic",
+		"python.formatting.provider": "black",
+		"python.formatting.blackArgs": [
+			"--line-length",
+			"117"
+		],
+		"python.linting.flake8Enabled": true,
+		"python.linting.flake8Args": [
+			"--max-line-length",
+			"120"
+		],
+		"isort.args": [
+			"--profile",
+			"black"
+		],
+		"editor.tokenColorCustomizations": {
+			"comments": "#ff1100"
+		}
+	}
+}
