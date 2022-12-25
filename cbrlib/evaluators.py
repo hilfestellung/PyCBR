@@ -267,6 +267,15 @@ def total_order_evaluator(ordering: list[str], evaluator: Evaluator, query: str,
     return evaluator(query_index, case_index)
 
 
+def table_lookup_evaluator(lookup: dict[str, dict[str, float]], query: str, case: str) -> float:
+    if query not in lookup:
+        return 0
+    case_lookup = lookup[query]
+    if case not in case_lookup:
+        return 0
+    return case_lookup[case]
+
+
 def equality_evaluator(query: Any, case: Any) -> float:
     if query is None or case is None or query != case:
         return 0

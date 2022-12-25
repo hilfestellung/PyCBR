@@ -5,10 +5,10 @@ import json
 import sys
 import time
 from dataclasses import dataclass
-from typing import Any, Iterator
+from typing import Any, Iterable, Iterator
 
-from cbrlib import evaluators
-from cbrlib.casebase import Casebase, ReasoningRequest
+from cbrlib import casebase, evaluators
+from cbrlib.casebase import ReasoningRequest
 from cbrlib.evaluators import (
     Evaluator,
     NumericEvaluationOptions,
@@ -96,11 +96,11 @@ def raw_whiskeys() -> Iterator[dict[str, Any]]:
             yield row
 
 
-def load_whiskeys() -> Casebase[Whiskey]:
-    result: Casebase[Whiskey] = Casebase(Whiskey)
+def load_whiskeys() -> Iterable[Whiskey]:
+    result: Iterable[Whiskey] = []
     for row in raw_whiskeys():
         whiskey = Whiskey(**row)
-        result.add_case(whiskey)
+        result.append(whiskey)
     return result
 
 
@@ -123,7 +123,8 @@ def _extract_values() -> None:
 def main() -> None:
     whiskeys = load_whiskeys()
     start = time.perf_counter()
-    result = whiskeys.infer(
+    result = casebase.infer(
+        whiskeys,
         ReasoningRequest(
             Whiskey(
                 age=25,
