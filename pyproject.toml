@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "cbrlib"
+name = "pycbr"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Christian Dein <christian.dein@dein-hosting.de>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
@@ -10,9 +10,19 @@ python = "^3.11"
 
 
 [tool.poetry.group.dev.dependencies]
-black = "^22.12.0"
-flake8 = "^6.0.0"
-pytest = "^7.2.0"
+flake8-for-pycharm = "^0.4.1"
+black = { extras = ["d"], version = "^23.1.0" }
+
+[tool.black]
+line-length = 120
+
+[tool.flake8]
+#ignore = ['E231', 'E241']
+per-file-ignores = [
+    '__init__.py:F401',
+]
+max-line-length = 88
+count = true
 
 [build-system]
 requires = ["poetry-core"]

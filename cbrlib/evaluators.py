@@ -20,28 +20,38 @@ WeightedPropertyEvaluatorMapping = namedtuple(
 )
 
 
-def case_average_evaluator(mappings: Iterable[WeightedPropertyEvaluatorMapping], query: Any, case: Any) -> float:
+def case_average_evaluator(
+    mappings: Iterable[WeightedPropertyEvaluatorMapping],
+    query: Any,
+    case: Any,
+    getvalue: Callable[[object, str], Any] = getattr,
+) -> float:
     divider = 0
     similarity_sum = 0
     for property_name, weight, evaluator in mappings:
-        query_value = getattr(query, property_name)
+        query_value = getvalue(query, property_name)
         if query_value is None:
             continue
         divider += weight
-        case_value = getattr(case, property_name)
+        case_value = getvalue(case, property_name)
         similarity_sum += weight * evaluator(query_value, case_value)
     if divider <= 0:
         return 0
     return similarity_sum / divider
 
 
-def case_euclidean_evaluator(mappings: Iterable[PropertyEvaluatorMapping], query: Any, case: Any) -> float:
+def case_euclidean_evaluator(
+    mappings: Iterable[PropertyEvaluatorMapping],
+    query: Any,
+    case: Any,
+    getvalue: Callable[[object, str], Any] = getattr,
+) -> float:
     similarity_sum = 0
     for property_name, evaluator in mappings:
-        query_value = getattr(query, property_name)
+        query_value = getvalue(query, property_name)
         if query_value is None:
             continue
-        case_value = getattr(case, property_name)
+        case_value = getvalue(case, property_name)
         similarity = evaluator(query_value, case_value)
         if similarity <= 0:
             continue
@@ -49,13 +59,18 @@ def case_euclidean_evaluator(mappings: Iterable[PropertyEvaluatorMapping], query
     return math.sqrt(similarity_sum)
 
 
-def case_min_evaluator(mappings: Iterable[PropertyEvaluatorMapping], query: Any, case: Any) -> float:
+def case_min_evaluator(
+    mappings: Iterable[PropertyEvaluatorMapping],
+    query: Any,
+    case: Any,
+    getvalue: Callable[[object, str], Any] = getattr,
+) -> float:
     similarity_result = 0
     for property_name, evaluator in mappings:
-        query_value = getattr(query, property_name)
+        query_value = getvalue(query, property_name)
         if query_value is None:
             continue
-        case_value = getattr(case, property_name)
+        case_value = getvalue(case, property_name)
         similarity = evaluator(query_value, case_value)
         if similarity <= 0:
             continue
@@ -63,13 +78,18 @@ def case_min_evaluator(mappings: Iterable[PropertyEvaluatorMapping], query: Any,
     return similarity_result
 
 
-def case_max_evaluator(mappings: Iterable[PropertyEvaluatorMapping], query: Any, case: Any) -> float:
+def case_max_evaluator(
+    mappings: Iterable[PropertyEvaluatorMapping],
+    query: Any,
+    case: Any,
+    getvalue: Callable[[object, str], Any] = getattr,
+) -> float:
     similarity_result = 0
     for property_name, evaluator in mappings:
-        query_value = getattr(query, property_name)
+        query_value = getvalue(query, property_name)
         if query_value is None:
             continue
-        case_value = getattr(case, property_name)
+        case_value = getvalue(case, property_name)
         similarity = evaluator(query_value, case_value)
         if similarity <= 0:
             continue
@@ -77,14 +97,19 @@ def case_max_evaluator(mappings: Iterable[PropertyEvaluatorMapping], query: Any,
     return similarity_result
 
 
-def case_median_evaluator(mappings: Iterable[PropertyEvaluatorMapping], query: Any, case: Any) -> float:
+def case_median_evaluator(
+    mappings: Iterable[PropertyEvaluatorMapping],
+    query: Any,
+    case: Any,
+    getvalue: Callable[[object, str], Any] = getattr,
+) -> float:
     divider = 0
     similarity_results = []
     for property_name, evaluator in mappings:
-        query_value = getattr(query, property_name)
+        query_value = getvalue(query, property_name)
         if query_value is None:
             continue
-        case_value = getattr(case, property_name)
+        case_value = getvalue(case, property_name)
         similarity = evaluator(query_value, case_value)
         if similarity <= 0:
             continue

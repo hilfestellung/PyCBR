@@ -138,7 +138,7 @@ def main() -> None:
         whiskey_evaluator(),
     )
     runtime = time.perf_counter() - start
-    print(json.dumps(result, indent=2, default=_serializer))
+    # print(json.dumps(result, indent=2, default=_serializer))
     print(f"Reasoning took {(runtime * 1000):1.3}ms", file=sys.stderr)
 
 
