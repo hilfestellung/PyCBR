@@ -30,9 +30,7 @@ class ReasoningResponse(Generic[C]):
 
 
 def infer(casebase: Iterable[C], request: ReasoningRequest[C], evaluator: Evaluator) -> ReasoningResponse[C]:
-    offset = request.offset
     threshold = request.threshold
-    limit = request.limit
     calculations = [
         r
         for r in sorted(
@@ -42,6 +40,9 @@ def infer(casebase: Iterable[C], request: ReasoningRequest[C], evaluator: Evalua
         )
         if r.similarity >= threshold
     ]
+
+    offset = request.offset
+    limit = request.limit
     return ReasoningResponse(
         total_number_of_hits=len(calculations),
         hits=calculations[offset:offset + limit],  # fmt: skip

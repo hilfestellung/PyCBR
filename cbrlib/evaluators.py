@@ -3,7 +3,7 @@ import functools
 import math
 from collections import namedtuple
 from dataclasses import dataclass
-from enum import Enum
+from enum import Enum, auto
 from statistics import median
 from typing import Any, Callable, Iterable
 
@@ -204,17 +204,34 @@ def _interpolate_sigmoid(stretched_distance: float, linearity: float) -> float:
     return pow(2 - 2 * stretched_distance, 1 / linearity) / 2
 
 
-class NumberInterpolation(Enum):
-    POLYNOM = 1
-    SIGMOID = 2
-    ROOT = 3
+class NumericInterpolation(Enum):
+    Polynom = auto()
+    Sigmoid = auto()
+    Root = auto()
 
 
 _interpolations = {
-    NumberInterpolation.POLYNOM: _interpolate_polynom,
-    NumberInterpolation.ROOT: _interpolate_root,
-    NumberInterpolation.SIGMOID: _interpolate_sigmoid,
+    NumericInterpolation.Polynom: _interpolate_polynom,
+    NumericInterpolation.Root: _interpolate_root,
+    NumericInterpolation.Sigmoid: _interpolate_sigmoid,
 }
+
+
+@dataclass(slots=True, frozen=True)
+class FunctionCalculationParameter:
+    equal: float = dataclasses.field(default=0.0)
+    tolerance: float = dataclasses.field(default=0.5)
+    linearity: float = dataclasses.field(default=1.0)
+    interpolation: NumericInterpolation = dataclasses.field(default=NumericInterpolation.Polynom)
+
+    @functools.lru_cache(maxsize=1)
+    def get_interpolation(self):
+        return _interpolations[self.interpolation]
+
+    @staticmethod
+    @functools.lru_cache(maxsize=1)
+    def default() -> "FunctionCalculationParameter":
+        return FunctionCalculationParameter()
 
 
 @dataclass(slots=True, frozen=True)
@@ -227,15 +244,8 @@ class NumericEvaluationOptions:
 
     cyclic: bool = dataclasses.field(default=False)
 
-    equal_if_less: float = dataclasses.field(default=0.0)
-    tolerance_if_less: float = dataclasses.field(default=0.5)
-    linearity_if_less: float = dataclasses.field(default=1.0)
-    interpolation_if_less: NumberInterpolation = dataclasses.field(default=NumberInterpolation.POLYNOM)
-
-    equal_if_more: float = dataclasses.field(default=0.0)
-    tolerance_if_more: float = dataclasses.field(default=0.5)
-    linearity_if_more: float = dataclasses.field(default=1.0)
-    interpolation_if_more: NumberInterpolation = dataclasses.field(default=NumberInterpolation.POLYNOM)
+    if_less: FunctionCalculationParameter = dataclasses.field(default=FunctionCalculationParameter.default())
+    if_more: FunctionCalculationParameter = dataclasses.field(default=FunctionCalculationParameter.default())
 
     def __post_init__(self) -> None:
         min_ = self.min_
@@ -252,38 +262,34 @@ class NumericEvaluationOptions:
 
     @functools.lru_cache(maxsize=1)
     def get_interpolation_if_more(self):
-        return _interpolations[self.interpolation_if_more]
+        return _interpolations[self.if_more.interpolation]
 
     @functools.lru_cache(maxsize=1)
     def get_interpolation_if_less(self):
-        return _interpolations[self.interpolation_if_less]
+        return _interpolations[self.if_less.interpolation]
 
 
 def numeric_evalator(options: NumericEvaluationOptions, query: float, case: float) -> float:
-    distance = _calculate_distance(query, case, options.max_distance, options.cyclic)
     max_distance = _calculate_max_distance(query, options.max_distance, options.origin, options.use_origin)
     if max_distance == 0:
         return 1
+
+    distance = _calculate_distance(query, case, options.max_distance, options.cyclic)
     relative_distance = distance / max_distance
-    if relative_distance < 1:
-        if _is_less(case, query, options.max_distance, options.cyclic):
-            equal = options.equal_if_less
-            tolerance = options.tolerance_if_less
-            linearity = options.linearity_if_less
-            interpolation = options.get_interpolation_if_less()
-        else:
-            equal = options.equal_if_more
-            tolerance = options.tolerance_if_more
-            linearity = options.linearity_if_more
-            interpolation = options.get_interpolation_if_more()
-        if relative_distance <= equal:
-            return 1
-        elif relative_distance >= tolerance:
-            return 0
-        else:
-            stretched_distance = (relative_distance - equal) / (tolerance - equal)
-            return interpolation(stretched_distance, linearity)
-    return 0
+    if relative_distance >= 1:
+        return 0
+
+    less = _is_less(case, query, options.max_distance, options.cyclic)
+    parameters = options.if_less if less else options.if_more
+
+    if relative_distance <= parameters.equal:
+        return 1
+    elif relative_distance >= parameters.tolerance:
+        return 0
+
+    stretched_distance = (relative_distance - parameters.equal) / (parameters.tolerance - parameters.equal)
+    interpolation = parameters.get_interpolation()
+    return interpolation(stretched_distance, parameters.linearity)
 
 
 def total_order_evaluator(ordering: list[str], evaluator: Evaluator, query: str, case: str) -> float:

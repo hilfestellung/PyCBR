@@ -12,7 +12,7 @@ from cbrlib.casebase import ReasoningRequest
 from cbrlib.evaluators import (
     Evaluator,
     NumericEvaluationOptions,
-    WeightedPropertyEvaluatorMapping,
+    WeightedPropertyEvaluatorMapping, FunctionCalculationParameter,
 )
 
 whiskey_colours = [
@@ -45,16 +45,16 @@ whiskey_colours = [
 
 @dataclass(slots=True, frozen=True)
 class Whiskey:
-    distillery: str = dataclasses.field(default=None)  # pyright:reportGeneralTypeIssues=false
-    age: int = dataclasses.field(default=None)  # pyright:reportGeneralTypeIssues=false
-    proof: float = dataclasses.field(default=None)  # pyright:reportGeneralTypeIssues=false
-    sweetness: int = dataclasses.field(default=None)  # pyright:reportGeneralTypeIssues=false
-    peatiness: int = dataclasses.field(default=None)  # pyright:reportGeneralTypeIssues=false
-    availability: int = dataclasses.field(default=None)  # pyright:reportGeneralTypeIssues=false
-    colour: str = dataclasses.field(default=None)  # pyright:reportGeneralTypeIssues=false
-    nose: str = dataclasses.field(default=None)  # pyright:reportGeneralTypeIssues=false
-    flavour_palette: str = dataclasses.field(default=None)  # pyright:reportGeneralTypeIssues=false
-    finish: str = dataclasses.field(default=None)  # pyright:reportGeneralTypeIssues=false
+    distillery: str = dataclasses.field(default=None)
+    age: int = dataclasses.field(default=None)
+    proof: float = dataclasses.field(default=None)
+    sweetness: int = dataclasses.field(default=None)
+    peatiness: int = dataclasses.field(default=None)
+    availability: int = dataclasses.field(default=None)
+    colour: str = dataclasses.field(default=None)
+    nose: str = dataclasses.field(default=None)
+    flavour_palette: str = dataclasses.field(default=None)
+    finish: str = dataclasses.field(default=None)
 
 
 def age_evaluator() -> Evaluator:
@@ -63,7 +63,8 @@ def age_evaluator() -> Evaluator:
 
 
 def rating_evaluator() -> Evaluator:
-    options = NumericEvaluationOptions(min_=0, max_=10)
+    options = NumericEvaluationOptions(min_=0, max_=10, if_less=FunctionCalculationParameter(tolerance=1.0),
+                                       if_more=FunctionCalculationParameter(tolerance=1.0))
     return functools.partial(evaluators.numeric_evalator, options)
 
 
@@ -86,10 +87,12 @@ def whiskey_evaluator() -> Evaluator:
 
 
 def raw_whiskeys() -> Iterator[dict[str, Any]]:
-    with open("./data/Whiskey.csv", "r") as f:
-        csv_reader = csv.DictReader(f, delimiter=";", lineterminator="\n")
+    with open("./data/Whiskey.csv", "r") as fd:
+        csv_reader = csv.DictReader(fd, delimiter=";", lineterminator="\n")
         fields = dataclasses.fields(Whiskey)
-        for row in csv_reader:
+        for r in csv_reader:
+            # noinspection PyTypeChecker
+            row: dict[str, str] = r
             for f in fields:
                 if f.type != str:
                     row[f.name] = f.type(row[f.name])
@@ -97,7 +100,7 @@ def raw_whiskeys() -> Iterator[dict[str, Any]]:
 
 
 def load_whiskeys() -> Iterable[Whiskey]:
-    result: Iterable[Whiskey] = []
+    result: list[Whiskey] = []
     for row in raw_whiskeys():
         whiskey = Whiskey(**row)
         result.append(whiskey)
@@ -132,7 +135,7 @@ def main() -> None:
                 sweetness=10,
                 peatiness=0,
             ),
-            limit=20,
+            limit=5,
             threshold=0.4,
         ),
         whiskey_evaluator(),
